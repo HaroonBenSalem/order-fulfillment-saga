@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PaymentFailed",
+  "version": 1,
+  "topic": "payment.events",
+  "producer": "payment-service",
+  "consumers": ["saga-orchestrator-service"],
+  "description": "Publié quand la charge échoue. C'est l'event qui déclenche la COMPENSATION -- l'orchestrateur doit maintenant libérer le stock qui avait été réservé en Phase 2, car la commande ne sera finalement pas honorée.",
+  "type": "object",
+  "required": ["eventId", "orderId", "sagaId", "reason", "occurredAt"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "orderId": { "type": "string", "format": "uuid" },
+    "sagaId": { "type": "string", "format": "uuid" },
+    "reason": { "type": "string", "enum": ["INSUFFICIENT_FUNDS", "CARD_DECLINED", "GATEWAY_TIMEOUT"] },
+    "occurredAt": { "type": "string", "format": "date-time" }
+  }
+}

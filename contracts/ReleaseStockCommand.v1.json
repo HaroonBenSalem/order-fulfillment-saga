@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReleaseStockCommand",
+  "version": 1,
+  "topic": "saga.commands",
+  "producer": "saga-orchestrator-service",
+  "consumers": ["inventory-service"],
+  "description": "LA commande de compensation. Envoyée uniquement quand le paiement a échoué APRES que le stock avait déjà été réservé. Annule la réservation faite en Phase 2 -- c'est ce mécanisme qui transforme ce projet en vraie Saga et pas juste un pipeline d'events linéaire.",
+  "type": "object",
+  "required": ["commandId", "orderId", "sagaId", "itemsToRelease", "issuedAt"],
+  "properties": {
+    "commandId": { "type": "string", "format": "uuid" },
+    "orderId": { "type": "string", "format": "uuid" },
+    "sagaId": { "type": "string", "format": "uuid" },
+    "itemsToRelease": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["productId", "quantity"],
+        "properties": {
+          "productId": { "type": "string", "format": "uuid" },
+          "quantity": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "issuedAt": { "type": "string", "format": "date-time" }
+  }
+}

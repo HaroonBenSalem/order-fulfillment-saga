@@ -1,0 +1,73 @@
+services:
+
+  # ---- Kafka (KRaft mode = sans Zookeeper) -----------------------------
+  # Pourquoi KRaft: les anciens tutoriels Kafka utilisent toujours
+  # Zookeeper, mais depuis Kafka 3.x ce n'est plus nécessaire et c'est
+  # devenu la norme en production. Un seul container, moins de RAM
+  # consommée sur ta machine, et c'est ce que les recruteurs voient
+  # comme du Kafka "à jour" en 2026.
+  kafka:
+    image: apache/kafka:3.7.0
+    container_name: saga-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@saga-kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  # ---- Kafka UI (pas obligatoire mais énorme gain de temps) ------------
+  # Te permet de voir les topics, les messages, les consumer groups
+  # dans le navigateur au lieu de taper des commandes kafka-console-*
+  # à chaque fois que tu veux débugger un event qui n'arrive pas.
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: saga-kafka-ui
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: saga-kafka:9092
+    depends_on:
+      - kafka
+
+  # ---- Postgres (1 container, 4 databases logiquement séparées) -------
+  # Pourquoi 1 container et pas 4: en vraie prod, chaque service aurait
+  # sa propre instance Postgres (vrai Database-per-Service, isolation
+  # réseau totale). En local sur ton laptop, 4 containers Postgres =
+  # gaspillage de RAM pour rien. La séparation logique (4 databases
+  # différentes dans le même serveur, jamais de cross-database JOIN)
+  # te donne la même discipline architecturale. Tu pourras expliquer
+  # ce compromis en interview — c'est exactement le genre de decision
+  # qu'un senior justifie au lieu de juste suivre un tutoriel.
+  postgres:
+    image: postgres:16-alpine
+    container_name: saga-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: saga_admin
+      POSTGRES_PASSWORD: saga_pass
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d
+      - saga_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U saga_admin"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  saga_postgres_data:

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OrderCreated",
+  "version": 1,
+  "topic": "order.events",
+  "producer": "order-service",
+  "consumers": ["saga-orchestrator-service"],
+  "description": "Publié quand une commande est persistée avec succès. C'est l'event qui démarre la saga.",
+  "type": "object",
+  "required": ["eventId", "orderId", "customerId", "items", "totalAmount", "occurredAt"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid", "description": "Identifiant unique de CET event (pas de la commande). Utilisé pour la dédupe côté consumer." },
+    "orderId": { "type": "string", "format": "uuid" },
+    "customerId": { "type": "string", "format": "uuid" },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["productId", "quantity"],
+        "properties": {
+          "productId": { "type": "string", "format": "uuid" },
+          "quantity": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "totalAmount": { "type": "number", "minimum": 0 },
+    "occurredAt": { "type": "string", "format": "date-time" }
+  }
+}

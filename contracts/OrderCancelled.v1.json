@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OrderCancelled",
+  "version": 1,
+  "topic": "notification.events",
+  "producer": "saga-orchestrator-service",
+  "consumers": ["notification-service"],
+  "description": "Publié quand la saga échoue, peu importe l'étape (stock insuffisant OU paiement échoué après compensation). Saga status final: CANCELLED.",
+  "type": "object",
+  "required": ["eventId", "orderId", "sagaId", "customerId", "reason", "occurredAt"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "orderId": { "type": "string", "format": "uuid" },
+    "sagaId": { "type": "string", "format": "uuid" },
+    "customerId": { "type": "string", "format": "uuid" },
+    "reason": { "type": "string", "description": "Reprend le 'reason' du StockRejected ou PaymentFailed qui a causé l'annulation." },
+    "occurredAt": { "type": "string", "format": "date-time" }
+  }
+}

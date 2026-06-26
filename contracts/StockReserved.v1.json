@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StockReserved",
+  "version": 1,
+  "topic": "inventory.events",
+  "producer": "inventory-service",
+  "consumers": ["saga-orchestrator-service"],
+  "description": "Publié quand TOUS les articles d'une commande ont été réservés avec succès dans l'inventaire.",
+  "type": "object",
+  "required": ["eventId", "orderId", "sagaId", "reservedItems", "occurredAt"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "orderId": { "type": "string", "format": "uuid" },
+    "sagaId": { "type": "string", "format": "uuid", "description": "Permet à l'orchestrateur de matcher la réponse à la bonne instance de saga." },
+    "reservedItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["productId", "quantity"],
+        "properties": {
+          "productId": { "type": "string", "format": "uuid" },
+          "quantity": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "occurredAt": { "type": "string", "format": "date-time" }
+  }
+}

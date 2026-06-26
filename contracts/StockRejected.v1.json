@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StockRejected",
+  "version": 1,
+  "topic": "inventory.events",
+  "producer": "inventory-service",
+  "consumers": ["saga-orchestrator-service"],
+  "description": "Publié quand au moins un article de la commande n'a pas pu être réservé (stock insuffisant). Déclenche directement l'annulation de la saga -- pas de compensation nécessaire ici car rien n'a été réservé.",
+  "type": "object",
+  "required": ["eventId", "orderId", "sagaId", "reason", "occurredAt"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "orderId": { "type": "string", "format": "uuid" },
+    "sagaId": { "type": "string", "format": "uuid" },
+    "reason": { "type": "string", "enum": ["INSUFFICIENT_STOCK", "PRODUCT_NOT_FOUND"] },
+    "occurredAt": { "type": "string", "format": "date-time" }
+  }
+}

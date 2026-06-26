@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OrderConfirmed",
+  "version": 1,
+  "topic": "notification.events",
+  "producer": "saga-orchestrator-service",
+  "consumers": ["notification-service"],
+  "description": "Publié quand la saga complète avec succès (stock réservé ET paiement réussi). Saga status final: COMPLETED.",
+  "type": "object",
+  "required": ["eventId", "orderId", "sagaId", "customerId", "occurredAt"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "orderId": { "type": "string", "format": "uuid" },
+    "sagaId": { "type": "string", "format": "uuid" },
+    "customerId": { "type": "string", "format": "uuid" },
+    "occurredAt": { "type": "string", "format": "date-time" }
+  }
+}

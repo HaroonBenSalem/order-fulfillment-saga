@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ChargePaymentCommand",
+  "version": 1,
+  "topic": "saga.commands",
+  "producer": "saga-orchestrator-service",
+  "consumers": ["payment-service"],
+  "description": "Commande (pas un event de fait) envoyée par l'orchestrateur APRES que le stock a été réservé avec succès. Demande à payment-service de tenter le paiement.",
+  "type": "object",
+  "required": ["commandId", "orderId", "sagaId", "customerId", "amount", "issuedAt"],
+  "properties": {
+    "commandId": { "type": "string", "format": "uuid" },
+    "orderId": { "type": "string", "format": "uuid" },
+    "sagaId": { "type": "string", "format": "uuid" },
+    "customerId": { "type": "string", "format": "uuid" },
+    "amount": { "type": "number", "minimum": 0 },
+    "issuedAt": { "type": "string", "format": "date-time" }
+  }
+}

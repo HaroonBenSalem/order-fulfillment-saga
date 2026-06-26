@@ -1,0 +1,18 @@
+# Java / Maven / Gradle
+target/
+build/
+*.class
+.gradle/
+!gradle-wrapper.jar
+
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# OS
+.DS_Store
+
+# Env files (jamais commit de secrets)
+.env
+*.env.local

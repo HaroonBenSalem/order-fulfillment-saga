@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PaymentProcessed",
+  "version": 1,
+  "topic": "payment.events",
+  "producer": "payment-service",
+  "consumers": ["saga-orchestrator-service"],
+  "description": "Publié quand la charge a réussi. Dernière étape positive de la saga -- l'orchestrateur peut maintenant confirmer la commande.",
+  "type": "object",
+  "required": ["eventId", "orderId", "sagaId", "transactionId", "amount", "occurredAt"],
+  "properties": {
+    "eventId": { "type": "string", "format": "uuid" },
+    "orderId": { "type": "string", "format": "uuid" },
+    "sagaId": { "type": "string", "format": "uuid" },
+    "transactionId": { "type": "string", "format": "uuid" },
+    "amount": { "type": "number", "minimum": 0 },
+    "occurredAt": { "type": "string", "format": "date-time" }
+  }
+}
