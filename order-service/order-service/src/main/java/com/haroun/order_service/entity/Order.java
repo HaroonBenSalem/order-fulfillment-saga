@@ -19,7 +19,7 @@ public class Order {
     private UUID id;
 
     @Column(name="customer_id", nullable = false)
-    private UUID customer_id;
+    private UUID customerId;
     @Column(name = "status", nullable = false, length = 20)
     private String status;
 
