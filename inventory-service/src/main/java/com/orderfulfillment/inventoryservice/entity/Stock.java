@@ -40,6 +40,11 @@ public class Stock {
         this.updatedAt = Instant.now();
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Instant.now();
+    }
+
     @Transient
     public int getQuantitySellable() {
         return quantityAvailable - quantityReserved;
