@@ -1,4 +1,4 @@
-package com.orderfulfillment.order_service.dto;
+package com.orderfulfillment.inventoryservice.dto;
 import java.util.UUID;
 
 public record InventoryReservedEvent(UUID sagaId) {}

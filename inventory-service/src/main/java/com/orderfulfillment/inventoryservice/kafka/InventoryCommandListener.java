@@ -23,9 +23,7 @@ public class InventoryCommandListener {
     public void handleReserveCommand(String message){
         ReserveInventoryCommand command = jsonMapper.readValue(message, ReserveInventoryCommand.class);
         log.info("Received reservation command for saga {}", command.sagaId());
-        for(ReserveInventoryCommand.ItemPayload item : command.items()){
-            stockReservationService.reserveStock(item.productId(), item.quantity());
-        }
+        stockReservationService.reserveForCommand(command);
     }
 
 }

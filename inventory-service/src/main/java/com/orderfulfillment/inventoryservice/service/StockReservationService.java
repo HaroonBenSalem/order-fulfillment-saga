@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import com.orderfulfillment.inventoryservice.dto.ReserveInventoryCommand;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class StockReservationService {
             maxAttempts = 3,
             backoff = @Backoff(delay = 50, multiplier = 2)
     )
-    public void reserveStock(String productId, int quantity){
-        transactionalWriter.doReverse(productId, quantity);
+    public void reserveForCommand(ReserveInventoryCommand command){
+        transactionalWriter.processReservation(command);
     }
 }
