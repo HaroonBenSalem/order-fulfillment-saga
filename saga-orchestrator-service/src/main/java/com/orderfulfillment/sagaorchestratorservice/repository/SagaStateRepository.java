@@ -1,4 +1,4 @@
-package com.orderfulfillment.saga-orchestrator-service.repository;
+package com.orderfulfillment.sagaorchestratorservice.repository;
 
 import com.orderfulfillment.sagaorchestratorservice.entity.SagaState;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -16,10 +16,7 @@ public class InventoryCommandListener {
     private final StockReservationService stockReservationService;
     private final JsonMapper jsonMapper = new JsonMapper();
 
-    @KafkaListener(
-            topics = "inventory.reserve.command.v1",
-            groupId = "inventory-service-group"
-    )
+    @KafkaListener(topics = "inventory.reserve.command.v1")
     public void handleReserveCommand(String message){
         ReserveInventoryCommand command = jsonMapper.readValue(message, ReserveInventoryCommand.class);
         log.info("Received reservation command for saga {}", command.sagaId());

@@ -1,7 +1,7 @@
-package com.orderfulfillment.saga-orchestrator-service.service;
+package com.orderfulfillment.sagaorchestratorservice.service;
 
-import com.orderfulfillment.saga-orchestrator-service.entity.OutboxEvent;
-import com.orderfulfillment.saga-orchestrator-service.repository.OutboxEventRepository;
+import com.orderfulfillment.sagaorchestratorservice.entity.OutboxEvent;
+import com.orderfulfillment.sagaorchestratorservice.repository.OutboxEventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

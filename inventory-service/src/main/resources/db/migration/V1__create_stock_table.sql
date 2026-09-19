@@ -1,6 +1,6 @@
 CREATE TABLE stock (
     id BIGSERIAL PRIMARY KEY,
-    product_id VARCHAR(255) NOT NULL UNIQUE,
+    product_id UUID NOT NULL,
     quantity_available INTEGER NOT NULL DEFAULT 0,
     quantity_reserved INTEGER NOT NULL DEFAULT 0,
     version BIGINT NOT NULL DEFAULT 0,

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "stock")
@@ -16,7 +17,7 @@ public class Stock {
     private Long id;
 
     @Column(name = "product_id", nullable = false, unique = true)
-    private String productId;
+    private UUID productId;
 
     @Column(name = "quantity_available", nullable = false)
     private Integer quantityAvailable;
