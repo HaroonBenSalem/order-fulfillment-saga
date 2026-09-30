@@ -1,0 +1,7 @@
+{
+  "sagaId": "uuid",
+  "orderId": "uuid",
+  "productId": "uuid",
+  "quantity": "int",
+  "reservedAt": "timestamp"
+}

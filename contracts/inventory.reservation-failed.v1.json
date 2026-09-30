@@ -1,0 +1,8 @@
+{
+  "sagaId": "uuid",
+  "orderId": "uuid",
+  "productId": "uuid",
+  "quantity": "int",
+  "reason": "INSUFFICIENT_STOCK | PRODUCT_NOT_FOUND | INVALID_QUANTITY",
+  "failedAt": "timestamp"
+}
