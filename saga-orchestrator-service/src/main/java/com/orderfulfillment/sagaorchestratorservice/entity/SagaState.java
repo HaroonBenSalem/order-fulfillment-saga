@@ -52,5 +52,6 @@ public class SagaState{
         INVENTORY_RESERVATION_PENDING,
         INVENTORY_RESERVED,
         COMPLETED,
+        CANCELLED
     }
 }
