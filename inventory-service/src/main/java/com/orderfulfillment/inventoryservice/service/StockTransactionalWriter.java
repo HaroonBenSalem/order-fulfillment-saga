@@ -13,17 +13,25 @@ import com.orderfulfillment.inventoryservice.dto.InventoryReservedEvent;
 import com.orderfulfillment.inventoryservice.dto.InventoryReservationFailedEvent;
 import tools.jackson.databind.json.JsonMapper;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StockTransactionalWriter {
+    private static final String MESSAGE_TYPE = "ReserveInventoryCommand";
 
     private final StockRepository stockRepository;
     private final OutboxEventRepository outboxEventRepository;
+    private final ProcessedMessageStore processedMessageStore;
     private final JsonMapper jsonMapper = new JsonMapper();
 
     @Transactional
     public void processReservation(ReserveInventoryCommand command) {
+        if (!processedMessageStore.markIfNew(command.sagaId(), MESSAGE_TYPE)){
+            log.info("Duplicate reserve command ignored for saga {}", command.sagaId());
+            return;
+        }
         for (var item : command.items()) {
             if (item.quantity() <= 0) {
                 writeFailure(command.sagaId(), FailureReason.INVALID_QUANTITY);
