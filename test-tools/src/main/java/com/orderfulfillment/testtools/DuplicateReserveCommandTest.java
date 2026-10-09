@@ -26,9 +26,10 @@ public class DuplicateReserveCommandTest {
         UUID sagaId = UUID.randomUUID();
         UUID orderId = UUID.randomUUID();
 
+
         Map<String, Object> item = Map.of(
                 "productId", PRODUCT_ID,
-                "quantity", 1
+                "quantity", 999999
         );
 
         Map<String, Object> command = Map.of(
